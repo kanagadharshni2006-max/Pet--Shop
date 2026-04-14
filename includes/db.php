@@ -1,0 +1,16 @@
+<?php
+// Simple PDO Database Connection
+$host = 'localhost';
+$db = 'pet_shop';
+$user = 'root';
+$pass = 'pass';
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    // For development purposes. In production, log the error and show a generic message.
+    // die("Database connection failed: " . $e->getMessage());
+}
+?>
