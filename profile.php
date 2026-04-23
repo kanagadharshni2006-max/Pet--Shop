@@ -24,7 +24,7 @@ include 'includes/header.php';
                     <a href="#wishlist" class="list-group-item list-group-item-action p-3 fw-bold border-bottom" data-bs-toggle="list">
                         <i class="fa-regular fa-heart me-2"></i> Wishlist
                     </a>
-                    <a href="login.php" class="list-group-item list-group-item-action text-danger p-3 fw-bold border-0">
+                    <a href="logout.php" class="list-group-item list-group-item-action text-danger p-3 fw-bold border-0">
                         <i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout
                     </a>
                 </div>

@@ -68,7 +68,7 @@ if(session_status() === PHP_SESSION_NONE) {
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end shadow border-0">
                         <li><a class="dropdown-item" href="../index.php">View Site</a></li>
-                        <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+                        <li><a class="dropdown-item text-danger" href="../logout.php">Logout</a></li>
                     </ul>
                 </div>
             </div>
