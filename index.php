@@ -4,163 +4,100 @@ include 'includes/header.php';
 ?>
 
 <!-- Hero Section -->
-<section class="hero-section text-center">
-    <div class="container">
-        <h1 class="hero-title mb-3">Welcome to <span>Paws & Claws</span></h1>
-        <p class="hero-subtitle">Your pet's happiness, health, and style start here.</p>
+<section class="hero-section text-center py-5" style="background: linear-gradient(135deg, #fff5e6 0%, #ffffff 100%);">
+    <div class="container py-5">
+        <h1 class="hero-title mb-3" style="font-size: 3.5rem;">Find Your Perfect <span>Furry Friend</span></h1>
+        <p class="hero-subtitle fs-5 text-muted mb-4">Your pet's happiness, health, and style start here.</p>
         <div class="mt-4">
-            <a href="products.php" class="btn btn-primary-custom btn-lg me-3 mb-2">Shop Essentials</a>
-            <a href="pets.php" class="btn btn-secondary-custom btn-lg mb-2">Adopt a Pet</a>
+            <a href="#categories" class="btn btn-primary-custom btn-lg me-3 px-5 rounded-pill shadow">Explore Categories</a>
+            <?php if(!isset($_SESSION['user_id'])): ?>
+                <a href="login.php" class="btn btn-outline-dark btn-lg px-5 rounded-pill">Getting Started</a>
+            <?php endif; ?>
         </div>
     </div>
 </section>
 
-<!-- Categories Section -->
-<section class="container mb-5">
-    <div class="row text-center mb-4">
+<!-- Main Categories Section -->
+<section id="categories" class="container py-5">
+    <div class="row text-center mb-5">
         <div class="col-12">
-            <h2>Shop by Category</h2>
-            <p class="text-muted">Find exactly what your furry friend needs.</p>
+            <h2 class="brand-font display-6">Shop by Animal</h2>
+            <div class="mx-auto" style="width: 100px; height: 5px; background: var(--primary); border-radius: 5px; margin-bottom: 20px;"></div>
         </div>
     </div>
-    <div class="row">
-        <!-- Mock Categories -->
-        <div class="col-6 col-md-3">
-            <a href="products.php?category=food">
-                <div class="category-card">
-                    <i class="fa-solid fa-bone category-icon"></i>
-                    <h5>Pet Food</h5>
+    <div class="row justify-content-center g-4">
+        <div class="col-6 col-md-4 col-lg-3">
+            <a href="pets.php?type=Dog" class="text-decoration-none">
+                <div class="category-card p-4 text-center border-0 shadow-sm rounded-4 transition-all">
+                    <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=150&q=80" class="rounded-circle mb-3 border border-4 border-white shadow-sm" style="width: 120px; height: 120px; object-fit: cover;">
+                    <h4 class="text-dark">Dogs</h4>
+                    <span class="text-muted small">View All Dogs</span>
                 </div>
             </a>
         </div>
-        <div class="col-6 col-md-3">
-            <a href="products.php?category=accessories">
-                <div class="category-card">
-                    <i class="fa-solid fa-dog category-icon"></i>
-                    <h5>Accessories</h5>
+        <div class="col-6 col-md-4 col-lg-3">
+            <a href="pets.php?type=Cat" class="text-decoration-none">
+                <div class="category-card p-4 text-center border-0 shadow-sm rounded-4 transition-all">
+                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=150&q=80" class="rounded-circle mb-3 border border-4 border-white shadow-sm" style="width: 120px; height: 120px; object-fit: cover;">
+                    <h4 class="text-dark">Cats</h4>
+                    <span class="text-muted small">View All Cats</span>
                 </div>
             </a>
         </div>
-        <div class="col-6 col-md-3">
-            <a href="products.php?category=grooming">
-                <div class="category-card">
-                    <i class="fa-solid fa-bath category-icon"></i>
-                    <h5>Grooming</h5>
-                </div>
-            </a>
-        </div>
-        <div class="col-6 col-md-3">
-            <a href="products.php?category=medicine">
-                <div class="category-card">
-                    <i class="fa-solid fa-notes-medical category-icon"></i>
-                    <h5>Medicines</h5>
+        <div class="col-6 col-md-4 col-lg-3">
+            <a href="pets.php?type=Bird" class="text-decoration-none">
+                <div class="category-card p-4 text-center border-0 shadow-sm rounded-4 transition-all">
+                    <img src="https://images.unsplash.com/photo-1452857297128-d9c29adba80b?auto=format&fit=crop&w=150&q=80" class="rounded-circle mb-3 border border-4 border-white shadow-sm" style="width: 120px; height: 120px; object-fit: cover;">
+                    <h4 class="text-dark">Birds</h4>
+                    <span class="text-muted small">View All Birds</span>
                 </div>
             </a>
         </div>
     </div>
 </section>
 
-<!-- Featured Products Section -->
-<section class="container mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Featured Products</h2>
-        <a href="products.php" class="btn btn-outline-dark rounded-pill px-4 fw-bold">View All</a>
+<!-- Adoption vs Sale Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-md-6">
+                <div class="p-5 bg-white shadow-sm rounded-4 h-100">
+                    <i class="fa-solid fa-heart text-danger display-4 mb-3"></i>
+                    <h3 class="brand-font">Adopt a Pet</h3>
+                    <p class="text-muted mb-4">Give a forever home to a rescue pet. These pets are looking for love and a safe haven.</p>
+                    <a href="pets.php?status=available&price=0" class="btn btn-secondary-custom px-4 rounded-pill">View Adoption List</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-5 bg-white shadow-sm rounded-4 h-100">
+                    <i class="fa-solid fa-tag text-primary display-4 mb-3"></i>
+                    <h3 class="brand-font">Pets for Sale</h3>
+                    <p class="text-muted mb-4">Find premium breeds and healthy companions from verified pet caregivers.</p>
+                    <a href="pets.php?status=available&min_price=1" class="btn btn-primary-custom px-4 rounded-pill">View Pets for Sale</a>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="row">
-        <!-- Mock Product 1 -->
-        <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="product-card">
-                <span class="badge-category">Food</span>
-                <a href="#" class="wishlist-btn"><i class="fa-regular fa-heart"></i></a>
-                <div class="product-img-wrapper">
-                    <!-- Placeholder image (using generic colored box for mock) -->
-                    <img src="https://images.unsplash.com/photo-1589924691995-400dc9ce53ce?auto=format&fit=crop&w=300&q=80" alt="Product">
-                </div>
-                <div class="product-card-body">
-                    <div class="rating">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
-                        <span class="text-muted ms-1">(120)</span>
-                    </div>
-                    <h5 class="product-title">Premium Dog Food - Chicken & Rice (5kg)</h5>
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <div>
-                            <span class="product-price">$24.99</span>
-                            <span class="old-price">$30.00</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary-custom w-100 mt-3 add-to-cart-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
-                </div>
-            </div>
+</section>
+
+<!-- Quick Products Access -->
+<section class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="brand-font">Featured Supplies</h2>
+        <a href="gallery.php" class="btn btn-link text-primary text-decoration-none fw-bold">Visit Gallery <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="row g-4 text-center">
+        <div class="col-md-3">
+             <a href="products.php?category=food" class="btn btn-outline-dark w-100 py-3 border-2 rounded-4">Pet Food</a>
         </div>
-        <!-- Mock Product 2 -->
-        <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="product-card">
-                <span class="badge-category">Accessories</span>
-                <a href="#" class="wishlist-btn"><i class="fa-regular fa-heart"></i></a>
-                <div class="product-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1523626752472-b55a628f1acc?auto=format&fit=crop&w=300&q=80" alt="Product">
-                </div>
-                <div class="product-card-body">
-                    <div class="rating">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
-                        <span class="text-muted ms-1">(45)</span>
-                    </div>
-                    <h5 class="product-title">Interactive Cat Scratching Post with Toy</h5>
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <div>
-                            <span class="product-price">$18.50</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary-custom w-100 mt-3 add-to-cart-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
-                </div>
-            </div>
+        <div class="col-md-3">
+             <a href="products.php?category=accessories" class="btn btn-outline-dark w-100 py-3 border-2 rounded-4">Accessories</a>
         </div>
-        <!-- Mock Product 3 -->
-        <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="product-card">
-                <span class="badge-category">Grooming</span>
-                <a href="#" class="wishlist-btn"><i class="fa-regular fa-heart"></i></a>
-                <div class="product-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=300&q=80" alt="Product">
-                </div>
-                <div class="product-card-body">
-                    <div class="rating">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                        <span class="text-muted ms-1">(89)</span>
-                    </div>
-                    <h5 class="product-title">Organic Oatmeal Pet Shampoo (500ml)</h5>
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <div>
-                            <span class="product-price">$12.99</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary-custom w-100 mt-3 add-to-cart-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
-                </div>
-            </div>
+        <div class="col-md-3">
+             <a href="products.php?category=grooming" class="btn btn-outline-dark w-100 py-3 border-2 rounded-4">Grooming</a>
         </div>
-        <!-- Mock Product 4 -->
-        <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="product-card">
-                <span class="badge-category">Medicine</span>
-                <a href="#" class="wishlist-btn"><i class="fa-regular fa-heart"></i></a>
-                <div class="product-img-wrapper">
-                    <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=300&q=80" alt="Product">
-                </div>
-                <div class="product-card-body">
-                    <div class="rating">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
-                        <span class="text-muted ms-1">(210)</span>
-                    </div>
-                    <h5 class="product-title">Advanced Flea & Tick Drops for Dogs</h5>
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <div>
-                            <span class="product-price">$35.00</span>
-                            <span class="old-price">$45.00</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary-custom w-100 mt-3 add-to-cart-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
-                </div>
-            </div>
+        <div class="col-md-3">
+             <a href="products.php?category=medicine" class="btn btn-outline-dark w-100 py-3 border-2 rounded-4">Medicine</a>
         </div>
     </div>
 </section>

@@ -1,4 +1,17 @@
-<?php include 'layout/header.php'; ?>
+<?php 
+require_once '../includes/db.php';
+include 'layout/header.php'; 
+
+// Fetch Stats
+$total_sales = $pdo->query("SELECT SUM(total_amount) FROM orders WHERE status = 'delivered'")->fetchColumn() ?? 0;
+$total_orders = $pdo->query("SELECT COUNT(*) FROM orders")->fetchColumn();
+$pets_adopted = $pdo->query("SELECT COUNT(*) FROM pets WHERE status = 'sold'")->fetchColumn();
+$registered_users = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
+
+// Fetch Recent Orders
+$stmt = $pdo->query("SELECT o.*, u.first_name, u.last_name FROM orders o JOIN users u ON o.user_id = u.id ORDER BY o.created_at DESC LIMIT 5");
+$recent_orders = $stmt->fetchAll();
+?>
 
 <div class="row mb-4">
     <div class="col-md-3 mb-3 mb-md-0">
@@ -6,7 +19,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h6 class="text-muted mb-1">Total Sales</h6>
-                    <h3 class="fw-bold mb-0 text-dark">$12,450</h3>
+                    <h3 class="fw-bold mb-0 text-dark">$<?php echo number_format($total_sales, 2); ?></h3>
                 </div>
                 <div class="bg-light p-3 rounded-circle text-primary">
                     <i class="fa-solid fa-dollar-sign fs-4"></i>
@@ -19,7 +32,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h6 class="text-muted mb-1">Total Orders</h6>
-                    <h3 class="fw-bold mb-0 text-dark">150</h3>
+                    <h3 class="fw-bold mb-0 text-dark"><?php echo $total_orders; ?></h3>
                 </div>
                 <div class="bg-light p-3 rounded-circle text-success">
                     <i class="fa-solid fa-cart-shopping fs-4"></i>
@@ -31,8 +44,8 @@
         <div class="card card-stat bg-white p-3 border-start border-4 border-info">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h6 class="text-muted mb-1">Pets Adopted</h6>
-                    <h3 class="fw-bold mb-0 text-dark">45</h3>
+                    <h6 class="text-muted mb-1">Pets Sold/Adopted</h6>
+                    <h3 class="fw-bold mb-0 text-dark"><?php echo $pets_adopted; ?></h3>
                 </div>
                 <div class="bg-light p-3 rounded-circle text-info">
                     <i class="fa-solid fa-heart fs-4"></i>
@@ -45,7 +58,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h6 class="text-muted mb-1">Registered Users</h6>
-                    <h3 class="fw-bold mb-0 text-dark">320</h3>
+                    <h3 class="fw-bold mb-0 text-dark"><?php echo $registered_users; ?></h3>
                 </div>
                 <div class="bg-light p-3 rounded-circle text-warning">
                     <i class="fa-solid fa-users fs-4"></i>
@@ -71,22 +84,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="fw-bold text-primary">#ORD-2026414</td>
-                        <td>John Doe</td>
-                        <td>April 14, 2026</td>
-                        <td><span class="badge bg-success rounded-pill px-3">Delivered</span></td>
-                        <td class="fw-bold">$45.66</td>
-                        <td><button class="btn btn-sm btn-outline-primary rounded-pill px-3">Details</button></td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold text-primary">#ORD-2026415</td>
-                        <td>Jane Smith</td>
-                        <td>April 13, 2026</td>
-                        <td><span class="badge bg-warning text-dark rounded-pill px-3">Pending</span></td>
-                        <td class="fw-bold">$120.00</td>
-                        <td><button class="btn btn-sm btn-outline-primary rounded-pill px-3">Details</button></td>
-                    </tr>
+                    <?php if (empty($recent_orders)): ?>
+                        <tr><td colspan="6" class="text-center py-4">No orders found yet.</td></tr>
+                    <?php else: ?>
+                        <?php foreach($recent_orders as $order): ?>
+                        <tr>
+                            <td class="fw-bold text-primary">#ORD-<?php echo $order['id']; ?></td>
+                            <td><?php echo htmlspecialchars($order['first_name'] . ' ' . $order['last_name']); ?></td>
+                            <td><?php echo date('M d, Y', strtotime($order['created_at'])); ?></td>
+                            <td>
+                                <span class="badge bg-<?php 
+                                    echo ($order['status'] === 'delivered' ? 'success' : 
+                                         ($order['status'] === 'pending' ? 'warning text-dark' : 'info')); 
+                                ?> rounded-pill px-3">
+                                    <?php echo ucfirst($order['status']); ?>
+                                </span>
+                            </td>
+                            <td class="fw-bold">$<?php echo number_format($order['total_amount'], 2); ?></td>
+                            <td><a href="orders.php?id=<?php echo $order['id']; ?>" class="btn btn-sm btn-outline-primary rounded-pill px-3">Details</a></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
@@ -99,3 +117,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

@@ -64,28 +64,52 @@ include 'includes/header.php';
             </div>
             
             <div class="row">
-                <!-- Generating 6 Mock Products -->
-                <?php for($i=1; $i<=6; $i++): ?>
-                <div class="col-lg-4 col-sm-6">
-                    <div class="product-card">
-                        <span class="badge-category">Food</span>
-                        <a href="#" class="wishlist-btn"><i class="fa-regular fa-heart"></i></a>
+                <?php
+                $stmt = $pdo->query("SELECT * FROM products");
+                while ($product = $stmt->fetch()):
+                ?>
+                <div class="col-lg-4 col-sm-6 mb-4">
+                    <div class="product-card h-100 d-flex flex-column">
+                        <span class="badge-category"><?php echo ucfirst($product['category']); ?></span>
+                        <a href="#" class="wishlist-btn" data-id="<?php echo $product['id']; ?>" data-type="product"><i class="fa-regular fa-heart"></i></a>
                         <div class="product-img-wrapper">
-                            <img src="https://images.unsplash.com/photo-1589924691995-400dc9ce53ce?auto=format&fit=crop&w=300&q=80" alt="Product">
+                            <img src="<?php echo $product['image']; ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
                         </div>
-                        <div class="product-card-body">
+                        <div class="product-card-body flex-grow-1">
                             <div class="rating">
-                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+                                <?php 
+                                $rating = floor($product['rating']);
+                                for($i=0; $i<$rating; $i++) echo '<i class="fa-solid fa-star"></i>';
+                                if($product['rating'] > $rating) echo '<i class="fa-solid fa-star-half-stroke"></i>';
+                                for($i=0; $i<5-ceil($product['rating']); $i++) echo '<i class="fa-regular fa-star"></i>';
+                                ?>
                             </div>
-                            <h5 class="product-title">Sample Product Title <?php echo $i; ?></h5>
+                            <h5 class="product-title"><?php echo htmlspecialchars($product['name']); ?></h5>
                             <div class="mt-3">
-                                <span class="product-price">$<?php echo rand(10, 50); ?>.99</span>
+                                <span class="product-price">$<?php echo number_format($product['price'], 2); ?></span>
                             </div>
-                            <button class="btn btn-primary-custom w-100 mt-3 add-to-cart-btn"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                        </div>
+                        <div class="p-3 pt-0">
+                            <button class="btn btn-primary-custom w-100 mb-2 add-to-cart-btn"
+                                    data-id="<?php echo $product['id']; ?>"
+                                    data-name="<?php echo htmlspecialchars($product['name']); ?>"
+                                    data-price="<?php echo $product['price']; ?>"
+                                    data-image="<?php echo $product['image']; ?>"
+                                    data-category="<?php echo $product['category']; ?>">
+                                <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button class="btn btn-outline-dark w-100 buy-now-btn"
+                                    data-id="<?php echo $product['id']; ?>"
+                                    data-name="<?php echo htmlspecialchars($product['name']); ?>"
+                                    data-price="<?php echo $product['price']; ?>"
+                                    data-image="<?php echo $product['image']; ?>"
+                                    data-category="<?php echo $product['category']; ?>">
+                                Buy Now
+                            </button>
                         </div>
                     </div>
                 </div>
-                <?php endfor; ?>
+                <?php endwhile; ?>
             </div>
             
             <!-- Pagination -->

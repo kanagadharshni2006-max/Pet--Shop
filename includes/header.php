@@ -1,9 +1,15 @@
 <?php
 // includes/header.php
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 if(session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,11 +40,20 @@ if(session_status() === PHP_SESSION_NONE) {
                 <li class="nav-item">
                     <a class="nav-link" href="index.php">Home</a>
                 </li>
+                <?php if(!isset($_SESSION['user_id'])): ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="products.php">Products</a>
+                    <a class="nav-link" href="login.php">Login</a>
+                </li>
+                <?php else: ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Logout</a>
+                </li>
+                <?php endif; ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.php">Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="pets.php">Pets for Adoption & Sale</a>
+                    <a class="nav-link" href="admin/login.php">Admin</a>
                 </li>
             </ul>
             <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
@@ -46,19 +61,18 @@ if(session_status() === PHP_SESSION_NONE) {
                     <a class="nav-link position-relative" href="cart.php">
                         <i class="fa-solid fa-cart-shopping fs-5"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge">
-                            2
+                            <?php 
+                            $total_cart = 0;
+                            if (isset($_SESSION['cart'])) {
+                                foreach ($_SESSION['cart'] as $item) {
+                                    $total_cart += $item['quantity'];
+                                }
+                            }
+                            echo $total_cart; 
+                            ?>
                         </span>
                     </a>
                 </li>
-                <?php if(isset($_SESSION['user_id'])): ?>
-                    <li class="nav-item ms-3">
-                        <a class="nav-link" href="profile.php"><i class="fa-regular fa-user"></i> Profile</a>
-                    </li>
-                <?php else: ?>
-                    <li class="nav-item ms-3">
-                        <a href="login.php" class="btn btn-outline-dark fw-bold border-2 rounded-pill px-4">Log In</a>
-                    </li>
-                <?php endif; ?>
             </ul>
         </div>
     </div>
