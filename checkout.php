@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
         
         $pdo->commit();
         $_SESSION['cart'] = []; // Clear cart
-        echo "<script>alert('Order placed successfully! Order ID: #ORD-$order_id'); window.location.href='index.php';</script>";
+        header("Location: order_success.php?id=" . $order_id);
         exit;
     } catch (Exception $e) {
         $pdo->rollBack();

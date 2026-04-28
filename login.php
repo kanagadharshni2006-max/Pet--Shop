@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['first_name'] = $user['first_name'];
-            $redirect = $_REQUEST['redirect'] ?? 'profile.php';
+            $redirect = !empty($_REQUEST['redirect']) ? $_REQUEST['redirect'] : 'profile.php';
             header("Location: $redirect");
             exit();
         } else {
