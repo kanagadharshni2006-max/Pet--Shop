@@ -67,7 +67,7 @@ if (isset($_GET['details'])) {
                             <td class="fw-bold text-primary">#ORD-<?php echo $order['id']; ?></td>
                             <td><?php echo htmlspecialchars($order['first_name'] . ' ' . $order['last_name']); ?></td>
                             <td><?php echo date('M d, Y', strtotime($order['created_at'])); ?></td>
-                            <td class="fw-bold">$<?php echo number_format($order['total_amount'], 2); ?></td>
+                            <td class="fw-bold">₹<?php echo number_format($order['total_amount'], 2); ?></td>
                             <td><?php echo strtoupper($order['payment_method']); ?></td>
                             <td>
                                 <form method="POST" class="d-flex align-items-center">
@@ -125,9 +125,9 @@ document.querySelectorAll('.view-details-btn').forEach(btn => {
                     html += `<li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
                                     <h6 class="mb-0">${item.item_name}</h6>
-                                    <small class="text-muted">${item.item_type} | $${item.price} x ${item.quantity}</small>
+                                    <small class="text-muted">${item.item_type} | ₹${item.price} x ${item.quantity}</small>
                                 </div>
-                                <span class="fw-bold">$${(item.price * item.quantity).toFixed(2)}</span>
+                                <span class="fw-bold">₹${(item.price * item.quantity).toFixed(2)}</span>
                              </li>`;
                 });
                 html += '</ul>';

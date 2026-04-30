@@ -1,5 +1,10 @@
 <?php
 require_once 'includes/db.php';
+
+// Fetch top feedbacks for testimonials
+$stmt = $pdo->query("SELECT f.*, u.first_name, u.last_name FROM feedbacks f JOIN users u ON f.user_id = u.id WHERE f.rating >= 4 ORDER BY f.created_at DESC LIMIT 4");
+$testimonials = $stmt->fetchAll();
+
 include 'includes/header.php';
 ?>
 
@@ -101,5 +106,34 @@ include 'includes/header.php';
         </div>
     </div>
 </section>
+
+<!-- Testimonials Section -->
+<?php if(!empty($testimonials)): ?>
+<section class="bg-light py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="brand-font display-6">Happy Pet Parents</h2>
+            <div class="mx-auto" style="width: 100px; height: 5px; background: var(--primary); border-radius: 5px;"></div>
+        </div>
+        <div class="row g-4 justify-content-center">
+            <?php foreach($testimonials as $testimony): ?>
+            <div class="col-md-6 col-lg-3">
+                <div class="card border-0 shadow-sm rounded-4 h-100 p-4 text-center transition-all category-card">
+                    <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($testimony['first_name'] . ' ' . $testimony['last_name']); ?>&background=random&color=fff&size=80" class="rounded-circle mx-auto mb-3 shadow-sm" style="width: 80px; height: 80px;" alt="Avatar">
+                    <h5 class="fw-bold mb-1"><?php echo htmlspecialchars($testimony['first_name']); ?></h5>
+                    <p class="small text-primary fw-bold mb-2"><?php echo htmlspecialchars($testimony['item_name']); ?></p>
+                    <div class="mb-3">
+                        <?php for($i=1; $i<=5; $i++): ?>
+                            <i class="fa-solid fa-star <?php echo $i <= $testimony['rating'] ? 'text-warning' : 'text-secondary opacity-25'; ?>"></i>
+                        <?php endfor; ?>
+                    </div>
+                    <p class="text-muted small fst-italic">"<?php echo htmlspecialchars($testimony['comment']); ?>"</p>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
 
 <?php include 'includes/footer.php'; ?>

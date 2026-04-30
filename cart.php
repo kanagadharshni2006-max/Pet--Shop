@@ -49,7 +49,7 @@ include 'includes/header.php';
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>$<?php echo number_format($item['price'], 2); ?></td>
+                                        <td>₹<?php echo number_format($item['price'], 2); ?></td>
                                         <td>
                                             <?php if($item['type'] === 'pet'): ?>
                                                 <input type="text" class="form-control form-control-sm text-center" value="1" readonly style="width: 60px;">
@@ -57,7 +57,7 @@ include 'includes/header.php';
                                                 <input type="number" name="quantities[<?php echo $key; ?>]" class="form-control form-control-sm text-center" value="<?php echo $item['quantity']; ?>" min="1" style="width: 80px;">
                                             <?php endif; ?>
                                         </td>
-                                        <td class="fw-bold">$<?php echo number_format($item_total, 2); ?></td>
+                                        <td class="fw-bold">₹<?php echo number_format($item_total, 2); ?></td>
                                         <td>
                                             <button type="button" class="btn btn-sm btn-danger" onclick="removeCartItem(<?php echo $key; ?>)"><i class="fa-solid fa-trash"></i></button>
                                         </td>
@@ -81,7 +81,7 @@ include 'includes/header.php';
                         <h5 class="brand-font mb-4">Cart Summary</h5>
                         <div class="d-flex justify-content-between mb-3">
                             <span>Subtotal</span>
-                            <span class="fw-bold">$<?php echo number_format($subtotal, 2); ?></span>
+                            <span class="fw-bold">₹<?php echo number_format($subtotal, 2); ?></span>
                         </div>
                         <div class="d-flex justify-content-between mb-3">
                             <span>Shipping</span>
@@ -90,7 +90,7 @@ include 'includes/header.php';
                         <hr>
                         <div class="d-flex justify-content-between mb-4">
                             <span class="fs-5 fw-bold">Total</span>
-                            <span class="fs-5 fw-bold text-primary">$<?php echo number_format($subtotal, 2); ?></span>
+                            <span class="fs-5 fw-bold text-primary">₹<?php echo number_format($subtotal, 2); ?></span>
                         </div>
                         <a href="checkout.php" class="btn btn-primary-custom w-100 btn-lg">Proceed to Checkout</a>
                     </div>

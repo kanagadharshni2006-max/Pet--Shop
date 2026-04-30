@@ -42,8 +42,8 @@ include 'includes/header.php';
                     <label class="form-label fw-bold">Price Range</label>
                     <input type="range" class="form-range" min="0" max="100" id="customRange">
                     <div class="d-flex justify-content-between text-muted small">
-                        <span>$0</span>
-                        <span>$100+</span>
+                        <span>₹0</span>
+                        <span>₹100+</span>
                     </div>
                 </div>
                 
@@ -86,7 +86,7 @@ include 'includes/header.php';
                             </div>
                             <h5 class="product-title"><?php echo htmlspecialchars($product['name']); ?></h5>
                             <div class="mt-3">
-                                <span class="product-price">$<?php echo number_format($product['price'], 2); ?></span>
+                                <span class="product-price">₹<?php echo number_format($product['price'], 2); ?></span>
                             </div>
                         </div>
                         <div class="p-3 pt-0">

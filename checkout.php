@@ -168,13 +168,13 @@ include 'includes/header.php';
                             <h6 class="mb-0 small"><?php echo htmlspecialchars($item['name']); ?></h6>
                             <span class="text-muted small">Qty: <?php echo $item['quantity']; ?></span>
                         </div>
-                        <span class="fw-bold small">$<?php echo number_format($item['price'] * $item['quantity'], 2); ?></span>
+                        <span class="fw-bold small">₹<?php echo number_format($item['price'] * $item['quantity'], 2); ?></span>
                     </div>
                     <?php endforeach; ?>
                     
                     <div class="d-flex justify-content-between mb-2 small mt-4">
                         <span class="text-muted">Subtotal</span>
-                        <span>$<?php echo number_format($subtotal, 2); ?></span>
+                        <span>₹<?php echo number_format($subtotal, 2); ?></span>
                     </div>
                     <div class="d-flex justify-content-between mb-3 small">
                         <span class="text-muted">Shipping</span>
@@ -182,7 +182,7 @@ include 'includes/header.php';
                     </div>
                     <div class="d-flex justify-content-between mb-4 border-top pt-3">
                         <span class="fw-bold fs-5">Total</span>
-                        <span class="fw-bold fs-5 text-primary">$<?php echo number_format($subtotal, 2); ?></span>
+                        <span class="fw-bold fs-5 text-primary">₹<?php echo number_format($subtotal, 2); ?></span>
                     </div>
                     
                     <button type="submit" name="place_order" class="btn btn-primary-custom w-100 btn-lg shadow-sm">Place Order</button>

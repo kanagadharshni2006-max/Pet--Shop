@@ -19,10 +19,10 @@ $recent_orders = $stmt->fetchAll();
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h6 class="text-muted mb-1">Total Sales</h6>
-                    <h3 class="fw-bold mb-0 text-dark">$<?php echo number_format($total_sales, 2); ?></h3>
+                    <h3 class="fw-bold mb-0 text-dark">₹<?php echo number_format($total_sales, 2); ?></h3>
                 </div>
                 <div class="bg-light p-3 rounded-circle text-primary">
-                    <i class="fa-solid fa-dollar-sign fs-4"></i>
+                    <i class="fa-solid fa-indian-rupee-sign fs-4"></i>
                 </div>
             </div>
         </div>
@@ -100,7 +100,7 @@ $recent_orders = $stmt->fetchAll();
                                     <?php echo ucfirst($order['status']); ?>
                                 </span>
                             </td>
-                            <td class="fw-bold">$<?php echo number_format($order['total_amount'], 2); ?></td>
+                            <td class="fw-bold">₹<?php echo number_format($order['total_amount'], 2); ?></td>
                             <td><a href="orders.php?id=<?php echo $order['id']; ?>" class="btn btn-sm btn-outline-primary rounded-pill px-3">Details</a></td>
                         </tr>
                         <?php endforeach; ?>

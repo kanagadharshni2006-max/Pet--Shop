@@ -93,7 +93,7 @@ $pets = $pdo->query("SELECT * FROM pets ORDER BY created_at DESC")->fetchAll();
                                     <?php echo ucfirst($pet['status']); ?>
                                 </span>
                             </td>
-                            <td class="text-success fw-bold">$<?php echo number_format($pet['price'], 2); ?></td>
+                            <td class="text-success fw-bold">₹<?php echo number_format($pet['price'], 2); ?></td>
                             <td>
                                 <button class="btn btn-sm btn-outline-info rounded-pill px-3 me-1 edit-btn" 
                                         data-pet='<?php echo json_encode($pet); ?>' 

@@ -85,7 +85,7 @@ $products = $pdo->query("SELECT * FROM products ORDER BY created_at DESC")->fetc
                             <td><img src="<?php echo htmlspecialchars($prod['image']); ?>" class="rounded shadow-sm" width="50" height="50" style="object-fit: cover;" alt="prod"></td>
                             <td class="fw-bold"><?php echo htmlspecialchars($prod['name']); ?></td>
                             <td><?php echo ucfirst(htmlspecialchars($prod['category'])); ?></td>
-                            <td class="text-success fw-bold">$<?php echo number_format($prod['price'], 2); ?></td>
+                            <td class="text-success fw-bold">₹<?php echo number_format($prod['price'], 2); ?></td>
                             <td>
                                 <?php if($prod['stock'] > 10): ?>
                                     <span class="badge bg-success rounded-pill px-2">In Stock (<?php echo $prod['stock']; ?>)</span>

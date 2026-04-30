@@ -78,7 +78,7 @@ $pets = $stmt->fetchAll();
                     </div>
                     <div class="p-3 bg-light border-top d-flex justify-content-between align-items-center mt-auto">
                         <span class="fw-bold <?php echo ($pet['price'] > 50 ? 'text-primary fs-5' : 'text-success'); ?>">
-                            <?php echo $pet['price'] > 50 ? '$' . number_format($pet['price'], 2) : 'Fee: $' . number_format($pet['price'], 2); ?>
+                            <?php echo $pet['price'] > 50 ? '₹' . number_format($pet['price'], 2) : 'Fee: ₹' . number_format($pet['price'], 2); ?>
                         </span>
                         <button class="btn btn-primary-custom add-to-cart-btn" 
                                 data-id="<?php echo $pet['id']; ?>"
