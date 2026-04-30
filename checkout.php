@@ -146,7 +146,7 @@ include 'includes/header.php';
                 <h4 class="mb-4 text-primary"><i class="fa-solid fa-credit-card"></i> Payment Method</h4>
                 
                 <div class="form-check mb-3 p-3 border rounded border-primary bg-light payment-option">
-                    <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="cod" value="cod" checked onchange="toggleQR()">
+                    <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="cod" value="cod" checked onchange="togglePayment()">
                     <label class="form-check-label fw-bold ms-2 mt-1" for="cod">
                         Cash on Delivery (COD)
                     </label>
@@ -154,17 +154,54 @@ include 'includes/header.php';
                 </div>
                 
                 <div class="form-check mb-3 p-3 border rounded payment-option">
-                    <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="online" value="online" onchange="toggleQR()">
+                    <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="online" value="online" onchange="togglePayment()">
                     <label class="form-check-label fw-bold ms-2 mt-1" for="online">
                         Credit / Debit Card
                     </label>
                 </div>
 
                 <div class="form-check mb-3 p-3 border rounded payment-option">
-                    <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="upi" value="upi" onchange="toggleQR()">
+                    <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="upi" value="upi" onchange="togglePayment()">
                     <label class="form-check-label fw-bold ms-2 mt-1" for="upi">
                         UPI (PhonePe, GPay, etc.)
                     </label>
+                </div>
+
+                <!-- Credit Card Form Container (Hidden by default) -->
+                <div id="cardDetailsContainer" class="mt-4 d-none fade-in">
+                    <div class="p-4 rounded-4" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; position: relative; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
+                        <!-- Decorative background circle -->
+                        <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <i class="fa-brands fa-cc-visa fs-1 opacity-75" id="cardIcon"></i>
+                            <i class="fa-solid fa-wifi" style="transform: rotate(90deg); opacity: 0.7;"></i>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label small text-light opacity-75 mb-1" style="font-size: 0.75rem; letter-spacing: 1px;">CARD NUMBER</label>
+                            <input type="text" id="ccNumber" class="form-control form-control-lg bg-transparent text-white border-0 p-0 fw-bold shadow-none" placeholder="0000 0000 0000 0000" maxlength="19" style="font-size: 1.5rem; letter-spacing: 2px;" oninput="formatCardNumber(this)">
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-8">
+                                <label class="form-label small text-light opacity-75 mb-1" style="font-size: 0.75rem; letter-spacing: 1px;">CARD HOLDER</label>
+                                <input type="text" class="form-control bg-transparent text-white border-0 p-0 shadow-none text-uppercase" placeholder="YOUR NAME">
+                            </div>
+                            <div class="col-4">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <label class="form-label small text-light opacity-75 mb-1" style="font-size: 0.75rem; letter-spacing: 1px;">EXPIRES</label>
+                                        <input type="text" id="ccExpiry" class="form-control bg-transparent text-white border-0 p-0 shadow-none" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)">
+                                    </div>
+                                    <div class="ms-3">
+                                        <label class="form-label small text-light opacity-75 mb-1" style="font-size: 0.75rem; letter-spacing: 1px;">CVV</label>
+                                        <input type="password" id="ccCvv" class="form-control bg-transparent text-white border-0 p-0 shadow-none" placeholder="•••" maxlength="3" oninput="formatCVV(this)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- QR Code Container (Hidden by default) -->
@@ -177,8 +214,9 @@ include 'includes/header.php';
             </div>
 
             <script>
-            function toggleQR() {
+            function togglePayment() {
                 const qrContainer = document.getElementById('qrCodeContainer');
+                const cardContainer = document.getElementById('cardDetailsContainer');
                 const isOnline = document.getElementById('online').checked;
                 const isUPI = document.getElementById('upi').checked;
                 const paymentOptions = document.querySelectorAll('.payment-option');
@@ -197,11 +235,50 @@ include 'includes/header.php';
                     document.getElementById('upi').parentElement.classList.add('border-primary', 'bg-light');
                 }
 
-                if (isOnline || isUPI) {
+                // Show/Hide Containers
+                if (isUPI) {
                     qrContainer.classList.remove('d-none');
+                    cardContainer.classList.add('d-none');
+                } else if (isOnline) {
+                    cardContainer.classList.remove('d-none');
+                    qrContainer.classList.add('d-none');
                 } else {
                     qrContainer.classList.add('d-none');
+                    cardContainer.classList.add('d-none');
                 }
+            }
+            
+            // Format Card Number (adds space every 4 digits)
+            function formatCardNumber(input) {
+                let value = input.value.replace(/\D/g, ''); // Remove non-digits
+                let formatted = value.match(/.{1,4}/g);
+                input.value = formatted ? formatted.join(' ') : value;
+                
+                // Change icon based on card type
+                const icon = document.getElementById('cardIcon');
+                if (value.startsWith('4')) {
+                    icon.className = 'fa-brands fa-cc-visa fs-1 opacity-75';
+                } else if (value.startsWith('5')) {
+                    icon.className = 'fa-brands fa-cc-mastercard fs-1 opacity-75';
+                } else if (value.startsWith('3')) {
+                    icon.className = 'fa-brands fa-cc-amex fs-1 opacity-75';
+                } else {
+                    icon.className = 'fa-regular fa-credit-card fs-1 opacity-75';
+                }
+            }
+
+            // Format Expiry Date (MM/YY)
+            function formatExpiry(input) {
+                let value = input.value.replace(/\D/g, '');
+                if (value.length >= 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                }
+                input.value = value;
+            }
+
+            // Format CVV (Numbers only)
+            function formatCVV(input) {
+                input.value = input.value.replace(/\D/g, '');
             }
             </script>
         </div>
