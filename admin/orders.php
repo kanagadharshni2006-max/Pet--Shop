@@ -85,6 +85,11 @@ if (isset($_GET['details'])) {
                                 <button class="btn btn-sm btn-outline-primary rounded-pill px-3 view-details-btn" data-id="<?php echo $order['id']; ?>" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">
                                     <i class="fa-solid fa-eye me-1"></i> View
                                 </button>
+                                <?php if(!empty($order['id_proof_path'])): ?>
+                                <a href="../<?php echo htmlspecialchars($order['id_proof_path']); ?>" target="_blank" class="btn btn-sm btn-outline-danger rounded-pill px-3 mt-1 d-block w-100">
+                                    <i class="fa-solid fa-id-card"></i> ID Proof
+                                </a>
+                                <?php endif; ?>
                             </td>
                         </tr>
                         <?php endforeach; ?>

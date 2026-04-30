@@ -26,20 +26,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = $_POST['status'] ?? 'available';
     $image = $_POST['image'] ?? '';
     $description = $_POST['description'] ?? '';
+    $requires_proof = isset($_POST['requires_proof']) ? 1 : 0;
     $id = $_POST['id'] ?? '';
 
     if (empty($id)) {
         // Add
-        $stmt = $pdo->prepare("INSERT INTO pets (name, breed, age, type, price, status, image, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        if ($stmt->execute([$name, $breed, $age, $type, $price, $status, $image, $description])) {
+        $stmt = $pdo->prepare("INSERT INTO pets (name, breed, age, type, price, status, image, description, requires_proof) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        if ($stmt->execute([$name, $breed, $age, $type, $price, $status, $image, $description, $requires_proof])) {
             $success_msg = "Pet added successfully!";
         } else {
             $error_msg = "Failed to add pet.";
         }
     } else {
         // Edit
-        $stmt = $pdo->prepare("UPDATE pets SET name=?, breed=?, age=?, type=?, price=?, status=?, image=?, description=? WHERE id=?");
-        if ($stmt->execute([$name, $breed, $age, $type, $price, $status, $image, $description, $id])) {
+        $stmt = $pdo->prepare("UPDATE pets SET name=?, breed=?, age=?, type=?, price=?, status=?, image=?, description=?, requires_proof=? WHERE id=?");
+        if ($stmt->execute([$name, $breed, $age, $type, $price, $status, $image, $description, $requires_proof, $id])) {
             $success_msg = "Pet updated successfully!";
         } else {
             $error_msg = "Failed to update pet.";
@@ -87,7 +88,11 @@ $pets = $pdo->query("SELECT * FROM pets ORDER BY created_at DESC")->fetchAll();
                             <td><img src="<?php echo htmlspecialchars($pet['image']); ?>" class="rounded shadow-sm" width="60" height="60" style="object-fit: cover;" alt="pet"></td>
                             <td><strong class="fs-6"><?php echo htmlspecialchars($pet['name']); ?></strong><br><small class="text-muted"><?php echo htmlspecialchars($pet['breed']); ?></small></td>
                             <td><?php echo htmlspecialchars($pet['age']); ?></td>
-                            <td><span class="badge bg-info rounded-pill px-2 text-dark"><?php echo htmlspecialchars($pet['type']); ?></span></td>
+                            <td><span class="badge bg-info rounded-pill px-2 text-dark"><?php echo htmlspecialchars($pet['type']); ?></span>
+                            <?php if($pet['requires_proof']): ?>
+                                <br><span class="badge bg-warning rounded-pill px-2 mt-1"><i class="fa-solid fa-scale-balanced"></i> Legal Proof Reqd</span>
+                            <?php endif; ?>
+                            </td>
                             <td>
                                 <span class="badge bg-<?php echo ($pet['status'] === 'available' ? 'success' : 'secondary'); ?> rounded-pill px-2">
                                     <?php echo ucfirst($pet['status']); ?>
@@ -164,6 +169,13 @@ $pets = $pdo->query("SELECT * FROM pets ORDER BY created_at DESC")->fetchAll();
                             <input type="text" name="image" id="petImage" class="form-control" required>
                         </div>
                         <div class="col-12 mb-3">
+                            <div class="form-check form-switch p-3 border rounded bg-light">
+                                <input class="form-check-input ms-1" type="checkbox" role="switch" id="petRequiresProof" name="requires_proof" value="1">
+                                <label class="form-check-label fw-bold ms-2 text-warning" for="petRequiresProof"><i class="fa-solid fa-scale-balanced"></i> Requires Legal Proof for Adoption?</label>
+                                <div class="form-text ms-2 mt-1">If checked, customers must upload their ID proof at checkout to buy this pet.</div>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3">
                             <label class="form-label fw-bold">Description</label>
                             <textarea name="description" id="petDescription" class="form-control" rows="3"></textarea>
                         </div>
@@ -192,6 +204,7 @@ document.querySelectorAll('.edit-btn').forEach(btn => {
         document.getElementById('petPrice').value = pet.price;
         document.getElementById('petImage').value = pet.image;
         document.getElementById('petDescription').value = pet.description;
+        document.getElementById('petRequiresProof').checked = pet.requires_proof == 1;
     });
 });
 

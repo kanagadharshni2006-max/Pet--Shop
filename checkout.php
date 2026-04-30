@@ -10,12 +10,12 @@ if (!$user_id) {
 
 // Fetch cart from database
 $stmt = $pdo->prepare("
-    SELECT c.id as cart_id, c.item_id, c.item_type, c.quantity, p.name, p.price, p.image, p.category 
+    SELECT c.id as cart_id, c.item_id, c.item_type, c.quantity, p.name, p.price, p.image, p.category, 0 as requires_proof 
     FROM cart c 
     JOIN products p ON c.item_id = p.id 
     WHERE c.user_id = ? AND c.item_type = 'product'
     UNION
-    SELECT c.id as cart_id, c.item_id, c.item_type, c.quantity, pet.name, pet.price, pet.image, pet.type as category 
+    SELECT c.id as cart_id, c.item_id, c.item_type, c.quantity, pet.name, pet.price, pet.image, pet.type as category, pet.requires_proof 
     FROM cart c 
     JOIN pets pet ON c.item_id = pet.id 
     WHERE c.user_id = ? AND c.item_type = 'pet'
@@ -52,11 +52,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
     }
     
     try {
+        $id_proof_path = null;
+        if (isset($_FILES['id_proof']) && $_FILES['id_proof']['error'] === 0) {
+            $ext = pathinfo($_FILES['id_proof']['name'], PATHINFO_EXTENSION);
+            $filename = uniqid('proof_') . '.' . $ext;
+            $target_dir = "uploads/proofs/";
+            if (!is_dir($target_dir)) mkdir($target_dir, 0777, true);
+            if (move_uploaded_file($_FILES['id_proof']['tmp_name'], $target_dir . $filename)) {
+                $id_proof_path = $target_dir . $filename;
+            }
+        }
+
         $pdo->beginTransaction();
         
         // Insert into orders
-        $stmt = $pdo->prepare("INSERT INTO orders (user_id, total_amount, payment_method, shipping_address) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$user_id, $total_amount, $payment_method, $full_address]);
+        $stmt = $pdo->prepare("INSERT INTO orders (user_id, total_amount, payment_method, shipping_address, id_proof_path) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$user_id, $total_amount, $payment_method, $full_address, $id_proof_path]);
         $order_id = $pdo->lastInsertId();
         
         // Insert into order_items
@@ -98,7 +109,7 @@ include 'includes/header.php';
         <div class="alert alert-danger"><?php echo $error; ?></div>
     <?php endif; ?>
 
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
     <div class="row">
         <div class="col-lg-8 mb-4">
             <div class="card shadow-sm border-0 p-4 mb-4">
@@ -289,8 +300,12 @@ include 'includes/header.php';
                     <h5 class="brand-font mb-4">Order Summary</h5>
                     <?php 
                     $subtotal = 0;
+                    $requires_proof = false;
                     foreach($cart_items as $item): 
                         $subtotal += $item['price'] * $item['quantity'];
+                        if($item['item_type'] === 'pet') {
+                            $requires_proof = true;
+                        }
                     ?>
                     <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-3">
                         <div>
@@ -313,6 +328,33 @@ include 'includes/header.php';
                         <span class="fw-bold fs-5">Total</span>
                         <span class="fw-bold fs-5 text-primary">₹<?php echo number_format($subtotal, 2); ?></span>
                     </div>
+
+                    <?php 
+                    $has_pet = false;
+                    foreach($cart_items as $item) {
+                        if($item['item_type'] === 'pet') {
+                            $has_pet = true;
+                            break;
+                        }
+                    }
+                    if($has_pet):
+                    ?>
+                    <div class="form-check mb-4 bg-white p-3 rounded border border-warning shadow-sm">
+                        <input class="form-check-input ms-1 border-secondary" type="checkbox" id="legalDeclaration" name="legal_declaration" required>
+                        <label class="form-check-label small fw-bold ms-2 text-dark" for="legalDeclaration">
+                            <i class="fa-solid fa-scale-balanced text-warning me-1"></i> Legal Declaration
+                        </label>
+                        <p class="text-muted mt-2 mb-0" style="font-size: 0.7rem; line-height: 1.4;">I confirm that I am legally permitted to own this pet in my jurisdiction. I understand it is not an illegal or banned exotic species in my state, and I agree to provide proper care as per animal welfare laws.</p>
+                        
+                        <?php if($requires_proof): ?>
+                        <div class="mt-3 p-3 bg-light rounded border border-danger">
+                            <label class="form-label fw-bold text-danger small"><i class="fa-solid fa-id-card"></i> Govt. ID Proof Required</label>
+                            <input type="file" name="id_proof" class="form-control form-control-sm" accept="image/*,.pdf" required>
+                            <div class="form-text" style="font-size: 0.65rem;">Please upload your Aadhar Card, PAN, or Driver's License. Required for adopting this specific pet.</div>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php endif; ?>
                     
                     <button type="submit" name="place_order" class="btn btn-primary-custom w-100 btn-lg shadow-sm">Place Order</button>
                 </div>
