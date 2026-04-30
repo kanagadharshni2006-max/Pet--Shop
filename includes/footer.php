@@ -1,7 +1,7 @@
 <?php
 // includes/footer.php
 ?>
-<footer class="footer-area">
+<footer class="footer-main">
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
@@ -61,6 +61,8 @@
     <i class="fa-solid fa-comment-dots"></i>
 </div>
 
+<!-- Toastify JS -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <!-- Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Custom Script -->

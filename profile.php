@@ -108,13 +108,13 @@ include 'includes/header.php';
     <div class="row">
         <!-- Sidebar -->
         <div class="col-lg-3 mb-4">
-            <div class="card shadow-sm border-0 rounded-4 text-center p-4 mb-4">
-                <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($user['first_name'] . ' ' . $user['last_name']); ?>&background=f2a65a&color=fff&size=100" alt="User Avatar" class="rounded-circle mb-3 mx-auto" style="width: 100px; height: 100px;">
-                <h5 class="fw-bold mb-1"><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></h5>
+            <div class="card-elegant text-center p-4 mb-4">
+                <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($user['first_name'] . ' ' . $user['last_name']); ?>&background=6366F1&color=fff&size=100" alt="User Avatar" class="rounded-circle mb-3 mx-auto" style="width: 100px; height: 100px;">
+                <h5 class="brand-font fw-bold mb-1"><?php echo htmlspecialchars($user['first_name'] . ' ' . $user['last_name']); ?></h5>
                 <p class="text-muted small">Member since <?php echo date('M Y', strtotime($user['created_at'])); ?></p>
             </div>
             
-            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <div class="card-elegant overflow-hidden">
                 <div class="list-group list-group-flush border-0">
                     <a href="#profile" class="list-group-item list-group-item-action active p-3 fw-bold border-0" data-bs-toggle="list">
                         <i class="fa-regular fa-user me-2"></i> My Profile
@@ -142,8 +142,8 @@ include 'includes/header.php';
                 
                 <!-- Profile Tab -->
                 <div class="tab-pane fade show active" id="profile">
-                    <div class="card shadow-sm border-0 rounded-4 p-4">
-                        <h4 class="brand-font mb-4 pb-3 border-bottom"><i class="fa-solid fa-id-card text-primary me-2"></i> Account Information</h4>
+                    <div class="card-elegant p-4">
+                        <h4 class="brand-font mb-4 pb-3 border-bottom"><i class="fa-solid fa-id-card text-primary-start me-2"></i> Account Information</h4>
                         <form method="POST">
                             <div class="row mb-3">
                                 <div class="col-md-6 mb-3 mb-md-0">
@@ -196,10 +196,10 @@ include 'includes/header.php';
                                     <?php else: ?>
                                         <?php foreach($orders as $order): ?>
                                         <tr>
-                                            <td class="fw-bold">#ORD-<?php echo $order['id']; ?></td>
+                                            <td class="fw-bold text-primary-start">#ORD-<?php echo $order['id']; ?></td>
                                             <td><?php echo date('M d, Y', strtotime($order['created_at'])); ?></td>
                                             <td>
-                                                <span class="badge bg-<?php echo ($order['status'] === 'delivered' ? 'success' : 'warning text-dark'); ?> rounded-pill px-2">
+                                                <span class="badge-elegant bg-light text-dark shadow-none border">
                                                     <?php echo ucfirst($order['status']); ?>
                                                 </span>
                                             </td>

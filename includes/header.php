@@ -22,6 +22,8 @@ if(session_status() === PHP_SESSION_NONE) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
 
@@ -31,8 +33,8 @@ if(session_status() === PHP_SESSION_NONE) {
         <a class="navbar-brand" href="index.php">
             <i class="fa-solid fa-paw"></i> Paws&Claws
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-            <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="fa-solid fa-bars-staggered"></span>
         </button>
         
         <div class="collapse navbar-collapse" id="mainNav">
@@ -77,3 +79,15 @@ if(session_status() === PHP_SESSION_NONE) {
         </div>
     </div>
 </nav>
+
+<!-- PHP Session Toasts -->
+<script>
+window.addEventListener('DOMContentLoaded', (event) => {
+    <?php if(isset($_SESSION['success'])): ?>
+        showToast("<?php echo $_SESSION['success']; unset($_SESSION['success']); ?>", "success");
+    <?php endif; ?>
+    <?php if(isset($_SESSION['error'])): ?>
+        showToast("<?php echo $_SESSION['error']; unset($_SESSION['error']); ?>", "error");
+    <?php endif; ?>
+});
+</script>

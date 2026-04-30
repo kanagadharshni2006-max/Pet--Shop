@@ -59,26 +59,29 @@ $pets = $stmt->fetchAll();
         <?php else: ?>
             <?php foreach($pets as $pet): ?>
             <div class="col-md-6 col-lg-4 mb-4">
-                <div class="product-card h-100 d-flex flex-column">
-                    <span class="badge-category bg-<?php echo ($pet['price'] > 50 ? 'warning text-dark' : 'info'); ?>">
-                        <?php echo ($pet['price'] > 50 ? 'For Sale' : 'For Adoption'); ?>
+                <div class="card-elegant h-100 d-flex flex-column">
+                    <span class="badge-elegant bg-white shadow-sm position-absolute top-0 start-0 m-3 z-3" style="color: var(--primary-start);">
+                        <?php echo ($pet['price'] > 50 ? 'Premium Sale' : 'Adopt Me'); ?>
                     </span>
                     <div class="product-img-wrapper" style="height: 250px;">
                         <img src="<?php echo htmlspecialchars($pet['image']); ?>" alt="<?php echo htmlspecialchars($pet['name']); ?>">
                     </div>
-                    <div class="product-card-body flex-grow-1 pb-0">
-                        <div class="d-flex justify-content-between">
-                            <h4 class="product-title fs-4"><?php echo htmlspecialchars($pet['name']); ?></h4>
-                            <a href="#" class="wishlist-btn text-decoration-none" data-id="<?php echo $pet['id']; ?>" data-type="pet">
+                    <div class="p-4 flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h4 class="brand-font h3 mb-0"><?php echo htmlspecialchars($pet['name']); ?></h4>
+                            <a href="#" class="wishlist-btn text-decoration-none fs-4" data-id="<?php echo $pet['id']; ?>" data-type="pet">
                                 <i class="fa-regular fa-heart"></i>
                             </a>
                         </div>
-                        <p class="text-muted mb-2"><i class="fa-solid fa-<?php echo strtolower($pet['type'] === 'Bird' ? 'kiwi-bird' : strtolower($pet['type'])); ?>"></i> <?php echo htmlspecialchars($pet['breed']); ?> &bull; <?php echo htmlspecialchars($pet['age']); ?></p>
-                        <p class="small text-muted border-top pt-2 mt-2"><?php echo htmlspecialchars($pet['description']); ?></p>
+                        <p class="text-muted small mb-3">
+                            <span class="badge bg-light text-dark rounded-pill px-3 py-2 me-2"><?php echo htmlspecialchars($pet['breed']); ?></span>
+                            <span class="badge bg-light text-dark rounded-pill px-3 py-2"><?php echo htmlspecialchars($pet['age']); ?></span>
+                        </p>
+                        <p class="text-muted small"><?php echo htmlspecialchars($pet['description']); ?></p>
                     </div>
-                    <div class="p-3 bg-light border-top d-flex justify-content-between align-items-center mt-auto">
-                        <span class="fw-bold <?php echo ($pet['price'] > 50 ? 'text-primary fs-5' : 'text-success'); ?>">
-                            <?php echo $pet['price'] > 50 ? '₹' . number_format($pet['price'], 2) : 'Fee: ₹' . number_format($pet['price'], 2); ?>
+                    <div class="p-4 bg-light border-top d-flex justify-content-between align-items-center mt-auto">
+                        <span class="fw-800 fs-4 text-primary-start">
+                            <?php echo $pet['price'] > 50 ? '₹' . number_format($pet['price'], 2) : 'FREE'; ?>
                         </span>
                         <button class="btn btn-primary-custom add-to-cart-btn" 
                                 data-id="<?php echo $pet['id']; ?>"

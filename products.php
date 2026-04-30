@@ -7,7 +7,7 @@ include 'includes/header.php';
     <div class="row">
         <!-- Sidebar Filter -->
         <div class="col-lg-3 col-md-4 mb-4">
-            <div class="card border-0 shadow-sm rounded-4 p-4">
+            <div class="card-elegant p-4">
                 <h4 class="mb-4 brand-font">Filters</h4>
                 
                 <div class="mb-4">
@@ -98,7 +98,7 @@ include 'includes/header.php';
                                     data-category="<?php echo $product['category']; ?>">
                                 <i class="fa-solid fa-cart-plus"></i> Add to Cart
                             </button>
-                            <button class="btn btn-outline-dark w-100 buy-now-btn"
+                            <button class="btn btn-secondary-custom w-100 buy-now-btn"
                                     data-id="<?php echo $product['id']; ?>"
                                     data-name="<?php echo htmlspecialchars($product['name']); ?>"
                                     data-price="<?php echo $product['price']; ?>"
