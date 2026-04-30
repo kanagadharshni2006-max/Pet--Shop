@@ -2,15 +2,30 @@
 require_once 'includes/db.php';
 if(session_status() === PHP_SESSION_NONE) { session_start(); }
 
-// Redirect if cart is empty
-if (empty($_SESSION['cart'])) {
-    header('Location: products.php');
-    exit;
-}
-
 $user_id = $_SESSION['user_id'] ?? null;
 if (!$user_id) {
     header('Location: login.php?redirect=checkout.php');
+    exit;
+}
+
+// Fetch cart from database
+$stmt = $pdo->prepare("
+    SELECT c.id as cart_id, c.item_id, c.item_type, c.quantity, p.name, p.price, p.image, p.category 
+    FROM cart c 
+    JOIN products p ON c.item_id = p.id 
+    WHERE c.user_id = ? AND c.item_type = 'product'
+    UNION
+    SELECT c.id as cart_id, c.item_id, c.item_type, c.quantity, pet.name, pet.price, pet.image, pet.type as category 
+    FROM cart c 
+    JOIN pets pet ON c.item_id = pet.id 
+    WHERE c.user_id = ? AND c.item_type = 'pet'
+");
+$stmt->execute([$user_id, $user_id]);
+$cart_items = $stmt->fetchAll();
+
+// Redirect if cart is empty
+if (empty($cart_items)) {
+    header('Location: products.php');
     exit;
 }
 
@@ -32,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
     
     $full_address = "$address, $state, $country - $zip";
     $total_amount = 0;
-    foreach ($_SESSION['cart'] as $item) {
+    foreach ($cart_items as $item) {
         $total_amount += $item['price'] * $item['quantity'];
     }
     
@@ -46,20 +61,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
         
         // Insert into order_items
         $stmt = $pdo->prepare("INSERT INTO order_items (order_id, item_id, item_type, item_name, price, quantity) VALUES (?, ?, ?, ?, ?, ?)");
-        foreach ($_SESSION['cart'] as $item) {
-            $stmt->execute([$order_id, $item['id'], $item['type'], $item['name'], $item['price'], $item['quantity']]);
+        foreach ($cart_items as $item) {
+            $stmt->execute([$order_id, $item['item_id'], $item['item_type'], $item['name'], $item['price'], $item['quantity']]);
             
             // If it's a pet, mark as sold
-            if ($item['type'] === 'pet') {
-                $pdo->prepare("UPDATE pets SET status = 'sold' WHERE id = ?")->execute([$item['id']]);
+            if ($item['item_type'] === 'pet') {
+                $pdo->prepare("UPDATE pets SET status = 'sold' WHERE id = ?")->execute([$item['item_id']]);
             } else {
                 // If product, reduce stock
-                $pdo->prepare("UPDATE products SET stock = stock - ? WHERE id = ?")->execute([$item['quantity'], $item['id']]);
+                $pdo->prepare("UPDATE products SET stock = stock - ? WHERE id = ?")->execute([$item['quantity'], $item['item_id']]);
             }
         }
         
+        // Clear database cart
+        $pdo->prepare("DELETE FROM cart WHERE user_id = ?")->execute([$user_id]);
+        
         $pdo->commit();
-        $_SESSION['cart'] = []; // Clear cart
         header("Location: order_success.php?id=" . $order_id);
         exit;
     } catch (Exception $e) {
@@ -128,30 +145,65 @@ include 'includes/header.php';
             <div class="card shadow-sm border-0 p-4">
                 <h4 class="mb-4 text-primary"><i class="fa-solid fa-credit-card"></i> Payment Method</h4>
                 
-                <div class="form-check mb-3 p-3 border rounded border-primary bg-light">
-                    <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="cod" value="cod" checked>
+                <div class="form-check mb-3 p-3 border rounded border-primary bg-light payment-option">
+                    <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="cod" value="cod" checked onchange="toggleQR()">
                     <label class="form-check-label fw-bold ms-2 mt-1" for="cod">
                         Cash on Delivery (COD)
                     </label>
                     <p class="text-muted small ms-4 mt-1 mb-0">Pay with cash upon delivery.</p>
                 </div>
                 
-                <div class="form-check mb-3 p-3 border rounded">
-                    <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="online" value="online">
+                <div class="form-check mb-3 p-3 border rounded payment-option">
+                    <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="online" value="online" onchange="toggleQR()">
                     <label class="form-check-label fw-bold ms-2 mt-1" for="online">
                         Credit / Debit Card
                     </label>
                 </div>
 
-                <div class="form-check mb-3 p-3 border rounded">
-                    <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="upi" value="upi">
+                <div class="form-check mb-3 p-3 border rounded payment-option">
+                    <input class="form-check-input ms-1" type="radio" name="paymentMethod" id="upi" value="upi" onchange="toggleQR()">
                     <label class="form-check-label fw-bold ms-2 mt-1" for="upi">
                         UPI (PhonePe, GPay, etc.)
                     </label>
                 </div>
 
-                <!-- Simulated forms omitted for brevity in final logic, but logic handles them -->
+                <!-- QR Code Container (Hidden by default) -->
+                <div id="qrCodeContainer" class="text-center mt-4 d-none fade-in">
+                    <p class="fw-bold text-success mb-2"><i class="fa-solid fa-qrcode"></i> Scan to Pay Total Amount</p>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=petshop@ybl&pn=PawsAndClaws" alt="QR Code" class="img-fluid rounded border p-2 shadow-sm bg-white" style="max-width: 200px;">
+                    <p class="text-muted small mt-2"><i class="fa-solid fa-circle-check text-success"></i> Secure Payment Gateway</p>
+                    <p class="text-muted small mt-1">Please scan the QR code using your UPI app or Camera. Once paid, click 'Place Order'.</p>
+                </div>
             </div>
+
+            <script>
+            function toggleQR() {
+                const qrContainer = document.getElementById('qrCodeContainer');
+                const isOnline = document.getElementById('online').checked;
+                const isUPI = document.getElementById('upi').checked;
+                const paymentOptions = document.querySelectorAll('.payment-option');
+                
+                // Reset styling
+                paymentOptions.forEach(opt => {
+                    opt.classList.remove('border-primary', 'bg-light');
+                });
+                
+                // Add styling to selected
+                if(document.getElementById('cod').checked) {
+                    document.getElementById('cod').parentElement.classList.add('border-primary', 'bg-light');
+                } else if(isOnline) {
+                    document.getElementById('online').parentElement.classList.add('border-primary', 'bg-light');
+                } else if(isUPI) {
+                    document.getElementById('upi').parentElement.classList.add('border-primary', 'bg-light');
+                }
+
+                if (isOnline || isUPI) {
+                    qrContainer.classList.remove('d-none');
+                } else {
+                    qrContainer.classList.add('d-none');
+                }
+            }
+            </script>
         </div>
 
         <div class="col-lg-4">
@@ -160,7 +212,7 @@ include 'includes/header.php';
                     <h5 class="brand-font mb-4">Order Summary</h5>
                     <?php 
                     $subtotal = 0;
-                    foreach($_SESSION['cart'] as $item): 
+                    foreach($cart_items as $item): 
                         $subtotal += $item['price'] * $item['quantity'];
                     ?>
                     <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-3">

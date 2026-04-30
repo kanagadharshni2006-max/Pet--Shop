@@ -1,57 +1,62 @@
 <?php
-session_start();
+require_once 'includes/db.php';
+if(session_status() === PHP_SESSION_NONE) { session_start(); }
 
-// Initialize cart if not exists
-if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
-}
+header('Content-Type: application/json');
 
 // Get POST data
 $input = json_decode(file_get_contents('php://input'), true);
 
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Please login to add items to your cart.',
+        'redirect' => 'login.php'
+    ]);
+    exit;
+}
+
+$user_id = $_SESSION['user_id'];
+
 if (isset($input['product_id'])) {
     $item_id = intval($input['product_id']);
-    $name = $input['name'];
-    $price = floatval($input['price']);
-    $image = $input['image'];
-    $category = $input['category'];
     $item_type = $input['type'] ?? 'product'; // 'product' or 'pet'
 
-    // Check if item already in cart
-    $found = false;
-    foreach ($_SESSION['cart'] as &$item) {
-        if ($item['id'] == $item_id && $item['type'] == $item_type) {
-            // For pets, we normally only allow 1, but for products we increment
+    try {
+        // Check if item already exists in the cart for this user
+        $stmt = $pdo->prepare("SELECT id, quantity FROM cart WHERE user_id = ? AND item_id = ? AND item_type = ?");
+        $stmt->execute([$user_id, $item_id, $item_type]);
+        $existing = $stmt->fetch();
+
+        if ($existing) {
             if ($item_type === 'product') {
-                $item['quantity']++;
+                // Update quantity for products
+                $update = $pdo->prepare("UPDATE cart SET quantity = quantity + 1 WHERE id = ?");
+                $update->execute([$existing['id']]);
             }
-            $found = true;
-            break;
+        } else {
+            // Insert new item
+            $insert = $pdo->prepare("INSERT INTO cart (user_id, item_id, item_type, quantity) VALUES (?, ?, ?, 1)");
+            $insert->execute([$user_id, $item_id, $item_type]);
         }
+
+        // Get total cart count
+        $countStmt = $pdo->prepare("SELECT SUM(quantity) as total FROM cart WHERE user_id = ?");
+        $countStmt->execute([$user_id]);
+        $total_items = (int) $countStmt->fetchColumn();
+
+        echo json_encode([
+            'status' => 'success',
+            'cart_count' => $total_items
+        ]);
+
+    } catch(PDOException $e) {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Database error: ' . $e->getMessage()
+        ]);
     }
 
-    if (!$found) {
-        $_SESSION['cart'][] = [
-            'id' => $item_id,
-            'name' => $name,
-            'price' => $price,
-            'image' => $image,
-            'category' => $category,
-            'type' => $item_type,
-            'quantity' => 1
-        ];
-    }
-
-    // Calculate total cart items for badge
-    $total_items = 0;
-    foreach ($_SESSION['cart'] as $item) {
-        $total_items += $item['quantity'];
-    }
-
-    echo json_encode([
-        'status' => 'success',
-        'cart_count' => $total_items
-    ]);
 } else {
     echo json_encode([
         'status' => 'error',

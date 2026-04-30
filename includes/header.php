@@ -63,10 +63,10 @@ if(session_status() === PHP_SESSION_NONE) {
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger cart-badge">
                             <?php 
                             $total_cart = 0;
-                            if (isset($_SESSION['cart'])) {
-                                foreach ($_SESSION['cart'] as $item) {
-                                    $total_cart += $item['quantity'];
-                                }
+                            if (isset($_SESSION['user_id'])) {
+                                $stmtCart = $pdo->prepare("SELECT SUM(quantity) FROM cart WHERE user_id = ?");
+                                $stmtCart->execute([$_SESSION['user_id']]);
+                                $total_cart = (int) $stmtCart->fetchColumn();
                             }
                             echo $total_cart; 
                             ?>

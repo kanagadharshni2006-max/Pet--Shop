@@ -20,6 +20,17 @@ try {
 if (isset($pdo)) {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+    // Ensure cart table exists
+    $pdo->exec("CREATE TABLE IF NOT EXISTS cart (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        item_id INT NOT NULL,
+        item_type VARCHAR(20) DEFAULT 'product',
+        quantity INT NOT NULL DEFAULT 1,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE KEY user_cart_item (user_id, item_id, item_type)
+    )");
 }
 ?>
 

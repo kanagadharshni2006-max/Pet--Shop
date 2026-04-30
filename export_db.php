@@ -7,7 +7,9 @@ while ($row = $result->fetch(PDO::FETCH_NUM)) {
     $tables[] = $row[0];
 }
 
-$sql = "SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';\n";
+$sql = "CREATE DATABASE IF NOT EXISTS `pet_shop`;\n";
+$sql .= "USE `pet_shop`;\n\n";
+$sql .= "SET SQL_MODE = 'NO_AUTO_VALUE_ON_ZERO';\n";
 $sql .= "SET time_zone = '+00:00';\n\n";
 
 foreach ($tables as $table) {
