@@ -104,8 +104,10 @@ $user_feedbacks = $stmt->fetchAll();
 include 'includes/header.php';
 ?>
 
-<div class="container my-5" style="min-height: 60vh;">
-    <div class="row">
+<!-- Immersive Profile Background -->
+<div class="auth-wrapper" style="background-image: url('https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=1920&q=80'); padding-top: 80px;">
+    <div class="container position-relative z-3 my-5">
+        <div class="row">
         <!-- Sidebar -->
         <div class="col-lg-3 mb-4">
             <div class="card-elegant text-center p-4 mb-4">
@@ -342,6 +344,7 @@ include 'includes/header.php';
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <!-- User Order Details Modal -->

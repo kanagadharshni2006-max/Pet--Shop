@@ -8,76 +8,55 @@ $testimonials = $stmt->fetchAll();
 include 'includes/header.php';
 ?>
 
-<!-- Hero Section -->
-<section class="hero-section overflow-hidden">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 text-center text-lg-start mb-5 mb-lg-0">
-                <h1 class="brand-font mb-4" style="font-size: clamp(2.8rem, 7vw, 4.2rem); line-height: 1.1;">
-                    Your Pet's <br> <span>Perfect Journey</span> <br> Starts Here
-                </h1>
-                <p class="text-muted fs-5 mb-5 pe-lg-5">
-                    Premium supplies, lovable companions, and world-class care — all tailored for your furry family members.
-                </p>
-                <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
-                    <a href="#categories" class="btn btn-primary-custom">Explore Categories</a>
-                    <a href="pets.php" class="btn btn-secondary-custom">Adopt a Pet</a>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="hero-img-container text-center">
-                    <!-- Image -->
-                    <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80" class="img-fluid float-anim" alt="Hero Pet">
-                    
-                    <!-- Neater Floating Badges -->
-                    <div class="glass-badge d-none d-md-flex" style="top: 10%; left: -5%;">
-                        <div class="bg-danger p-2 rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                            <i class="fa-solid fa-heart"></i>
-                        </div>
-                        <div>
-                            <div class="fw-800 text-dark mb-0">10k+</div>
-                            <div class="text-muted small fw-bold text-uppercase" style="font-size: 0.6rem;">Pet Lovers</div>
-                        </div>
+<!-- Full-Width Hero Section with Background Image -->
+<section class="hero-section-alt">
+    <!-- Overlay for Fade Effect -->
+    <div class="hero-overlay"></div>
+    
+    <div class="container position-relative z-3 py-5">
+        <div class="row min-vh-75 align-items-center justify-content-center text-center">
+            <div class="col-lg-8">
+                <div class="glass-container p-5 rounded-5 fade-in">
+                    <h1 class="brand-font mb-4 text-white" style="font-size: clamp(2.5rem, 8vw, 4.5rem); line-height: 1.1;">
+                        Your Pet's <br> <span>Perfect Journey</span> <br> Starts Here
+                    </h1>
+                    <p class="text-white opacity-75 fs-5 mb-5 px-lg-5">
+                        Discover premium supplies, lovable companions, and world-class care — all in one place.
+                    </p>
+                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                        <a href="#categories" class="btn btn-primary-custom px-5 py-3">Explore Categories</a>
+                        <a href="pets.php" class="btn btn-outline-light px-5 py-3 rounded-4 fw-bold">Adopt a Pet</a>
                     </div>
-                    
-                    <div class="glass-badge d-none d-md-flex" style="bottom: 15%; right: -5%;">
-                        <div class="bg-warning p-2 rounded-circle text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                            <i class="fa-solid fa-star"></i>
-                        </div>
-                        <div>
-                            <div class="fw-800 text-dark mb-0">4.9 / 5</div>
-                            <div class="text-muted small fw-bold text-uppercase" style="font-size: 0.6rem;">Customer Rating</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Stats Bar Overlay -->
-        <div class="stats-container mt-5">
-            <div class="row g-4 text-center">
-                <div class="col-6 col-md-3 stat-item">
-                    <h2>2.5k+</h2>
-                    <p>Adopted</p>
-                </div>
-                <div class="col-6 col-md-3 stat-item">
-                    <h2>500+</h2>
-                    <p>Breeds</p>
-                </div>
-                <div class="col-6 col-md-3 stat-item">
-                    <h2>12k+</h2>
-                    <p>Supplies</p>
-                </div>
-                <div class="col-6 col-md-3 stat-item">
-                    <h2>100%</h2>
-                    <p>Verified</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Rest of the sections remain same but inherit neater styles from CSS -->
+<!-- Stats Bar (Moved below the hero) -->
+<div class="container position-relative" style="margin-top: -60px; z-index: 10;">
+    <div class="stats-container">
+        <div class="row g-4 text-center">
+            <div class="col-6 col-md-3 stat-item">
+                <h2>2.5k+</h2>
+                <p>Adopted</p>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <h2>500+</h2>
+                <p>Breeds</p>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <h2>12k+</h2>
+                <p>Supplies</p>
+            </div>
+            <div class="col-6 col-md-3 stat-item">
+                <h2>100%</h2>
+                <p>Verified</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Main Categories Section -->
 <section id="categories" class="container py-5 mt-5">
     <div class="row text-center mb-5">

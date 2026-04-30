@@ -105,6 +105,46 @@ h1, h2, h3, h4, .brand-font {
   color: white;
 }
 
+/* Footer Refinement */
+.footer-main {
+  background: #F8FAFC;
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.social-btn {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: white;
+  color: var(--text-dark);
+  font-size: 1.2rem;
+  transition: var(--transition-pro);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  text-decoration: none !important;
+}
+
+.social-btn:hover {
+  transform: translateY(-5px);
+  color: white !important;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.social-btn.insta:hover { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+.social-btn.telegram:hover { background: #0088cc; }
+.social-btn.whatsapp:hover { background: #25D366; }
+
+.footer-links a:hover {
+  color: var(--primary-start) !important;
+  padding-left: 5px;
+}
+
+.footer-links a {
+  transition: var(--transition-pro);
+}
+
 .btn-secondary-custom {
   background: var(--secondary);
   color: white;
@@ -121,34 +161,117 @@ h1, h2, h3, h4, .brand-font {
   color: white;
 }
 
-/* Hero Section Refinement */
-.hero-section {
-  padding: 120px 0 180px;
-  background: radial-gradient(circle at 10% 10%, rgba(79, 70, 229, 0.03), transparent),
-              radial-gradient(circle at 90% 90%, rgba(236, 72, 153, 0.03), transparent);
+/* Full-Width Hero with Background Image */
+.hero-section-alt {
+  position: relative;
+  background-image: url('https://images.unsplash.com/photo-1548191265-cc70d3d45ba1?auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 }
 
-.hero-title span {
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.75); /* Darker fade */
+  z-index: 1;
+}
+
+.glass-container {
+  background: rgba(255, 255, 255, 0.03); /* More subtle glass */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+  position: relative;
+  z-index: 2;
+}
+
+.z-3 { z-index: 3; }
+.hero-section-alt h1 {
+  font-weight: 300; /* Thinner, more elegant weight */
+  letter-spacing: -0.05em;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.hero-section-alt h1 span {
+  font-weight: 800; /* Bold accent for contrast */
   background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.hero-img-container {
+/* Auth Pages (Login/Register) - Ultra Elegant */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
   position: relative;
-  border-radius: var(--radius-2xl);
-  overflow: visible;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  padding: 40px 0;
 }
 
-.hero-img-container img {
-  border-radius: var(--radius-2xl);
-  width: 100%;
-  box-shadow: var(--shadow-premium);
-  transition: var(--transition-pro);
+.auth-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(15, 23, 42, 0.8); /* Faded Overlay */
+  z-index: 1;
 }
 
-.hero-img-container:hover img {
-  transform: scale(1.02);
+.auth-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+  color: white;
+}
+
+.auth-card .text-muted {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.form-control-elegant {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+  border-radius: 14px;
+}
+
+.form-control-elegant::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.form-control-elegant:focus {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: var(--primary-start) !important;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
+}
+
+.input-group-text {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.auth-image {
+  background-size: cover;
+  background-position: center;
+  min-height: 400px;
 }
 
 /* Floating Badges - Neater Alignment */

@@ -1,56 +1,78 @@
 <?php
 // includes/footer.php
 ?>
-<footer class="footer-main">
+<footer class="footer-main py-5 mt-5">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+        <div class="row g-5">
+            <!-- Brand & Contact -->
+            <div class="col-lg-4">
                 <a class="navbar-brand mb-3 d-inline-block" href="index.php">
                     <i class="fa-solid fa-paw"></i> Paws&Claws
                 </a>
-                <p class="footer-text">
-                    Your one-stop destination for premium pet products, accessories, and lovable pets looking for a forever home. We believe every pet deserves the best care.
+                <p class="text-muted pe-lg-4 mb-4">
+                    Providing high-quality pet supplies and lovable companions since 2024. Your pet's comfort is our top priority.
                 </p>
-                <div class="social-icons mt-4">
-                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <div class="contact-details">
+                    <p class="mb-2 d-flex align-items-center">
+                        <i class="fa-solid fa-envelope text-primary-start me-3"></i>
+                        <a href="mailto:support@pawsandclaws.com" class="text-decoration-none text-muted">support@pawsandclaws.com</a>
+                    </p>
+                    <p class="mb-0 d-flex align-items-center">
+                        <i class="fa-solid fa-location-dot text-primary-start me-3"></i>
+                        <span class="text-muted">123 Pet Lane, Animal City</span>
+                    </p>
                 </div>
             </div>
             
-            <div class="col-lg-2 col-md-6 mb-4 mb-lg-0">
-                <h5>Quick Links</h5>
-                <ul class="footer-links">
-                    <li><a href="index.php">Home</a></li>
-                    <li><a href="products.php">Shop Products</a></li>
-                    <li><a href="pets.php">Adopt a Pet</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Contact</a></li>
+            <!-- Links -->
+            <div class="col-lg-2 col-6">
+                <h6 class="fw-bold text-dark mb-4">Company</h6>
+                <ul class="list-unstyled footer-links">
+                    <li class="mb-2"><a href="index.php" class="text-decoration-none text-muted">Home</a></li>
+                    <li class="mb-2"><a href="products.php" class="text-decoration-none text-muted">Shop</a></li>
+                    <li class="mb-2"><a href="pets.php" class="text-decoration-none text-muted">Adopt</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Our Story</a></li>
                 </ul>
             </div>
 
-            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-                <h5>Pet Care Tips</h5>
-                <ul class="footer-links">
-                    <li><a href="#">Dog Grooming Basics</a></li>
-                    <li><a href="#">Cat Nutrition Needs</a></li>
-                    <li><a href="#">Home Training Guide</a></li>
-                    <li><a href="#">Aquarium Setup Guide</a></li>
-                </ul>
+            <!-- Social & Community -->
+            <div class="col-lg-3 col-6">
+                <h6 class="fw-bold text-dark mb-4">Community</h6>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="#" class="social-btn insta" title="Instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-btn telegram" title="Telegram">
+                        <i class="fa-brands fa-telegram"></i>
+                    </a>
+                    <a href="#" class="social-btn whatsapp" title="WhatsApp">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                </div>
+                <p class="small text-muted mt-3">Follow us for daily pet cuteness!</p>
             </div>
             
-            <div class="col-lg-3 col-md-6">
-                <h5>Newsletter</h5>
-                <p class="footer-text">Subscribe to get tips and special offers.</p>
-                <form class="d-flex mt-3">
-                    <input type="email" class="form-control" placeholder="Email Address">
-                    <button class="btn btn-primary-custom ms-2" type="button"><i class="fa-solid fa-paper-plane"></i></button>
-                </form>
+            <!-- Newsletter -->
+            <div class="col-lg-3">
+                <h6 class="fw-bold text-dark mb-4">Newsletter</h6>
+                <p class="small text-muted mb-3">Join our community for exclusive deals.</p>
+                <div class="input-group">
+                    <input type="email" class="form-control border-0 bg-light" placeholder="Email Address" style="border-radius: 12px 0 0 12px;">
+                    <button class="btn btn-primary-custom" type="button" style="border-radius: 0 12px 12px 0;"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
             </div>
         </div>
-        <div class="row mt-5">
-            <div class="col-12 text-center text-muted">
-                <p class="mb-0">&copy; <?php echo date('Y'); ?> Paws & Claws Pet Shop. All rights reserved.</p>
+        
+        <hr class="my-5 opacity-10">
+        
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="small text-muted mb-0">&copy; <?php echo date('Y'); ?> Paws & Claws. Crafting happy tails.</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" height="20" class="me-3 opacity-50" alt="PayPal">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" height="15" class="me-3 opacity-50" alt="Visa">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" height="20" class="opacity-50" alt="MasterCard">
             </div>
         </div>
     </div>
