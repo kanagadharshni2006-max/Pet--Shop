@@ -57,41 +57,39 @@ $pets = $stmt->fetchAll();
                 <h3 class="text-muted">No pets found in this category.</h3>
             </div>
         <?php else: ?>
-            <?php foreach($pets as $pet): ?>
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card-elegant h-100 d-flex flex-column">
-                    <span class="badge-elegant bg-white shadow-sm position-absolute top-0 start-0 m-3 z-3" style="color: var(--primary-start);">
-                        <?php echo ($pet['price'] > 50 ? 'Premium Sale' : 'Adopt Me'); ?>
-                    </span>
-                    <div class="product-img-wrapper" style="height: 250px;">
-                        <img src="<?php echo htmlspecialchars($pet['image']); ?>" alt="<?php echo htmlspecialchars($pet['name']); ?>">
-                    </div>
-                    <div class="p-4 flex-grow-1">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h4 class="brand-font h3 mb-0"><?php echo htmlspecialchars($pet['name']); ?></h4>
-                            <a href="#" class="wishlist-btn text-decoration-none fs-4" data-id="<?php echo $pet['id']; ?>" data-type="pet">
-                                <i class="fa-regular fa-heart"></i>
-                            </a>
-                        </div>
-                        <p class="text-muted small mb-3">
-                            <span class="badge bg-light text-dark rounded-pill px-3 py-2 me-2"><?php echo htmlspecialchars($pet['breed']); ?></span>
-                            <span class="badge bg-light text-dark rounded-pill px-3 py-2"><?php echo htmlspecialchars($pet['age']); ?></span>
-                        </p>
-                        <p class="text-muted small"><?php echo htmlspecialchars($pet['description']); ?></p>
-                    </div>
-                    <div class="p-4 bg-light border-top d-flex justify-content-between align-items-center mt-auto">
-                        <span class="fw-800 fs-4 text-primary-start">
-                            <?php echo $pet['price'] > 50 ? '₹' . number_format($pet['price'], 2) : 'FREE'; ?>
-                        </span>
-                        <button class="btn btn-primary-custom add-to-cart-btn" 
-                                data-id="<?php echo $pet['id']; ?>"
-                                data-name="<?php echo htmlspecialchars($pet['name']); ?>"
-                                data-price="<?php echo $pet['price']; ?>"
-                                data-image="<?php echo $pet['image']; ?>"
-                                data-category="Pet"
-                                data-type="pet">
-                            <i class="fa-solid fa-cart-plus"></i> <?php echo $pet['price'] > 50 ? 'Buy' : 'Adopt'; ?>
+            <?php 
+            // Mocking aesthetic pet images for a professional look
+            $petMocks = [
+                'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80', // Buddy (Dog)
+                'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80', // Charlie (Cat)
+                'https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=600&q=80', // Oliver (Dog)
+                'https://images.unsplash.com/photo-1444464666168-49d633b867ad?auto=format&fit=crop&w=600&q=80', // Bird
+                'https://images.unsplash.com/photo-1540263062025-a764a51e600e?auto=format&fit=crop&w=600&q=80', // Small
+                'https://images.unsplash.com/photo-1592194996308-7b43878e84a6?auto=format&fit=crop&w=600&q=80'  // Cat
+            ];
+            $idx = 0;
+            foreach($pets as $pet): 
+                $img = $petMocks[$idx % 6];
+                $idx++;
+            ?>
+            <div class="col-md-6 col-lg-4" data-aos="fade-up">
+                <div class="product-card-real">
+                    <div class="product-img-box">
+                        <img src="<?php echo $img; ?>" alt="<?php echo $pet['name']; ?>">
+                        <div class="product-badge" style="background: var(--primary-start); color: white;"><?php echo $pet['status'] == 'Available' ? 'Ready to Adopt' : $pet['status']; ?></div>
+                        <button class="wish-btn addToWishlist" data-id="<?php echo $pet['id']; ?>" data-type="pet">
+                            <i class="fa-solid fa-paw"></i>
                         </button>
+                    </div>
+                    <div class="product-info-real mt-3">
+                        <div class="category-pill mb-1"><?php echo $pet['type']; ?> Breed</div>
+                        <h6 class="product-name-real mb-2"><?php echo htmlspecialchars($pet['name']); ?></h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-real">₹<?php echo number_format($pet['price'], 2); ?></span>
+                            <button class="add-cart-mini addToCart" data-id="<?php echo $pet['id']; ?>" data-type="pet">
+                                <i class="fa-solid fa-heart"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
