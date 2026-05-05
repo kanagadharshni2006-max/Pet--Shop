@@ -22,8 +22,8 @@ function showToast(message, type = "success") {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    // Wishlist Toggle Logic
-    const wishlistBtns = document.querySelectorAll('.wishlist-btn');
+    // Wishlist Toggle Logic (Enhanced for new UI)
+    const wishlistBtns = document.querySelectorAll('.wish-btn, .wishlist-btn');
     wishlistBtns.forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -39,15 +39,16 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'added' || data.status === 'removed') {
-                    this.classList.toggle('active');
                     const icon = this.querySelector('i');
                     if (data.status === 'added') {
                         icon.classList.remove('fa-regular');
                         icon.classList.add('fa-solid');
+                        this.style.color = "#EC4899";
                         showToast("Added to wishlist! ❤️");
                     } else {
                         icon.classList.remove('fa-solid');
                         icon.classList.add('fa-regular');
+                        this.style.color = "";
                         showToast("Removed from wishlist.", "info");
                     }
                 } else {
@@ -60,20 +61,12 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // Chatbot Toggle
-    const chatbotBubble = document.getElementById('chatbotBubble');
-    if (chatbotBubble) {
-        chatbotBubble.addEventListener('click', function() {
-            showToast('Chatbot: "Hi there! How can I help you and your pet today?"', "info");
-        });
-    }
-
-    // Add to Cart & Buy Now Logic
-    const addToCartBtns = document.querySelectorAll('.add-to-cart-btn, .buy-now-btn');
-    addToCartBtns.forEach(btn => {
+    // Add to Cart & Buy Now Logic (Enhanced for new UI)
+    const cartActionBtns = document.querySelectorAll('.addToCart, .add-to-cart-btn, .buyNow, .buy-now-btn');
+    cartActionBtns.forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
-            const isBuyNow = this.classList.contains('buy-now-btn');
+            const isBuyNow = this.classList.contains('buyNow') || this.classList.contains('buy-now-btn');
             const productData = {
                 product_id: this.getAttribute('data-id'),
                 name: this.getAttribute('data-name'),
@@ -83,15 +76,18 @@ document.addEventListener("DOMContentLoaded", function() {
                 type: this.getAttribute('data-type') || 'product'
             };
 
-            const originalText = this.innerHTML;
-            this.innerHTML = isBuyNow ? '<i class="fa-solid fa-spinner fa-spin"></i> Processing...' : '<i class="fa-solid fa-spinner fa-spin"></i> Adding...';
+            if (!productData.product_id) {
+                console.error("Missing product ID on button");
+                return;
+            }
+
+            const originalContent = this.innerHTML;
+            this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
             this.disabled = true;
 
             fetch('add_to_cart.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(productData)
             })
             .then(response => response.json())
@@ -103,32 +99,27 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
 
                     showToast(`${productData.name} added to cart! 🛒`);
-                    this.innerHTML = '<i class="fa-solid fa-check"></i> Added';
-                    this.classList.remove('btn-primary-custom');
-                    this.classList.add('btn-secondary-custom');
+                    this.innerHTML = '<i class="fa-solid fa-check"></i>';
                     
-                    // update cart badge
                     const badge = document.querySelector('.cart-badge');
-                    if(badge) {
-                        badge.innerText = data.cart_count;
-                    }
+                    if(badge) badge.innerText = data.cart_count;
 
                     setTimeout(() => {
-                        this.innerHTML = originalText;
-                        this.classList.remove('btn-secondary-custom');
-                        this.classList.add('btn-primary-custom');
+                        this.innerHTML = originalContent;
                         this.disabled = false;
                     }, 2000);
                 } else {
                     showToast('Error: ' + data.message, "error");
-                    this.innerHTML = originalText;
+                    this.innerHTML = originalContent;
                     this.disabled = false;
+                    if (data.message && data.message.includes('login')) {
+                        setTimeout(() => window.location.href = 'login.php', 1000);
+                    }
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
                 showToast("Something went wrong.", "error");
-                this.innerHTML = originalText;
+                this.innerHTML = originalContent;
                 this.disabled = false;
             });
         });

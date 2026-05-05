@@ -86,9 +86,28 @@ $pets = $stmt->fetchAll();
                         <h6 class="product-name-real mb-2"><?php echo htmlspecialchars($pet['name']); ?></h6>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="price-real">₹<?php echo number_format($pet['price'], 2); ?></span>
-                            <button class="add-cart-mini addToCart" data-id="<?php echo $pet['id']; ?>" data-type="pet">
-                                <i class="fa-solid fa-heart"></i>
-                            </button>
+                            <div class="d-flex gap-2">
+                                <button class="add-cart-mini buyNow" 
+                                        data-id="<?php echo $pet['id']; ?>" 
+                                        data-name="<?php echo htmlspecialchars($pet['name']); ?>" 
+                                        data-price="<?php echo $pet['price']; ?>" 
+                                        data-image="<?php echo $img; ?>" 
+                                        data-category="Pet"
+                                        data-type="pet"
+                                        title="Instant Buy">
+                                    <i class="fa-solid fa-bolt"></i>
+                                </button>
+                                <button class="add-cart-mini addToCart" 
+                                        data-id="<?php echo $pet['id']; ?>" 
+                                        data-name="<?php echo htmlspecialchars($pet['name']); ?>" 
+                                        data-price="<?php echo $pet['price']; ?>" 
+                                        data-image="<?php echo $img; ?>" 
+                                        data-category="Pet"
+                                        data-type="pet"
+                                        title="Add to Adoption List">
+                                    <i class="fa-solid fa-cart-plus"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
